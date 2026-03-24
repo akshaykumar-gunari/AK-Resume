@@ -1,49 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akshaykumar Gunari</title>
-    <link rel="icon" href="AK.jpg">
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akshaykumar Gunari — Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080a0f;
+      --surface: #0e1118;
+      --border: rgba(255,255,255,0.07);
+      --border-bright: rgba(255,255,255,0.15);
+      --text: #e8e6e0;
+      --muted: #5a5f70;
+      --gold: #c9a96e;
+      --gold-dim: rgba(201,169,110,0.15);
+      --gold-glow: rgba(201,169,110,0.25);
+      --teal: #4ec9b0;
+      --teal-dim: rgba(78,201,176,0.08);
+    }
 
-        iframe {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-    </style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, background 0.3s;
+      box-shadow: 0 0 6px 2px rgba(201,169,110,0.5), 0 0 14px 4px rgba(201,169,110,0.2);
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 28px; height: 28px;
+      border: 1px solid rgba(201,169,110,0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, border-color 0.3s;
+      box-shadow: 0 0 8px 1px rgba(201,169,110,0.1);
+    }
+    .trail {
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      transform: translate(-50%, -50%);
+      background: var(--gold);
+      opacity: 0;
+    }
+
+    .bg-canvas { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+    .bg-canvas::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(201,169,110,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 80%, rgba(78,201,176,0.04) 0%, transparent 60%);
+    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: drift 20s ease-in-out infinite; }
+    .orb-1 { width:500px;height:500px;background:radial-gradient(circle,rgba(201,169,110,0.12),transparent 70%);top:-100px;left:-100px;animation-delay:0s; }
+    .orb-2 { width:600px;height:600px;background:radial-gradient(circle,rgba(78,201,176,0.08),transparent 70%);bottom:-150px;right:-150px;animation-delay:-10s; }
+    .orb-3 { width:300px;height:300px;background:radial-gradient(circle,rgba(201,169,110,0.06),transparent 70%);top:50%;left:60%;animation-delay:-5s;animation-duration:25s; }
+    @keyframes drift {
+      0%,100%{transform:translate(0,0) scale(1);}
+      33%{transform:translate(40px,-30px) scale(1.05);}
+      66%{transform:translate(-20px,40px) scale(0.95);}
+    }
+
+    .grid-overlay {
+      position: fixed; inset: 0; z-index: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+    }
+
+    .shell {
+      position: relative; z-index: 10;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; flex-direction: column;
+      padding: 48px 36px;
+      border-right: 1px solid var(--border);
+      background: rgba(8,10,15,0.6);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+    aside::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity: 0.6;
+    }
+
+    .logo-mark {
+      width: 48px; height: 48px;
+      border: 1px solid var(--border-bright);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 300;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      margin-bottom: 40px;
+      position: relative;
+      animation: fadeIn 1s 0.1s both;
+    }
+    .logo-mark::after {
+      content: '';
+      position: absolute; inset: 3px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 2px;
+    }
+
+    .aside-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300; line-height: 1.1;
+      animation: fadeIn 1s 0.2s both;
+    }
+    .aside-name em { font-style: italic; color: var(--gold); }
+
+    .aside-role {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-top: 8px;
+      animation: fadeIn 1s 0.3s both;
+    }
+
+    .divider { height:1px;background:var(--border);margin:32px 0;animation:fadeIn 1s 0.4s both; }
+
+    .nav-label {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 16px;
+      animation: fadeIn 1s 0.45s both;
+    }
+
+    .aside-links { display:flex;flex-direction:column;gap:4px;animation:fadeIn 1s 0.5s both; }
+
+    .aside-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px; border-radius: 6px;
+      text-decoration: none; color: var(--muted);
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .aside-link:hover { color:var(--text);background:rgba(255,255,255,0.04);border-color:var(--border); }
+
+    .icon {
+      width: 28px; height: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.2s;
+    }
+    .aside-link:hover .icon { border-color:var(--gold);background:var(--gold-dim); }
+    .icon svg { width:13px;height:13px; }
+
+    .aside-bottom { margin-top:auto;animation:fadeIn 1s 0.6s both; }
+
+    .status-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px;
+      background: rgba(78,201,176,0.06);
+      border: 1px solid rgba(78,201,176,0.15);
+      border-radius: 8px; margin-bottom: 16px;
+    }
+    .status-dot {
+      width:7px;height:7px;border-radius:50%;
+      background:var(--teal);box-shadow:0 0 8px var(--teal);
+      animation:pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+    .status-text { font-size:11px;color:var(--teal);font-weight:500; }
+
+    .download-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg,var(--gold) 0%,#a8845a 100%);
+      color: #0a0800;
+      border: none; border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s; position: relative; overflow: hidden;
+    }
+    .download-btn::before {
+      content:'';position:absolute;top:0;left:-100%;
+      width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+      transition:left 0.4s;
+    }
+    .download-btn:hover::before{left:100%;}
+    .download-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,169,110,0.3);}
+    .download-btn svg{width:14px;height:14px;}
+
+    main { display:flex;flex-direction:column;padding:48px 56px;gap:32px; }
+
+    .topbar { display:flex;align-items:center;justify-content:space-between;animation:slideDown 0.8s 0.1s both; }
+    .breadcrumb { display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);letter-spacing:0.1em; }
+    .breadcrumb span { color:var(--border-bright); }
+    .badge {
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 12px;background:var(--surface);
+      border:1px solid var(--border);border-radius:20px;
+      font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);
+    }
+
+    .hero { animation:slideDown 0.8s 0.2s both; }
+    .hero-eyebrow {
+      display:flex;align-items:center;gap:12px;
+      font-size:10px;font-weight:600;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;
+    }
+    .hero-eyebrow::before,.hero-eyebrow::after{content:'';height:1px;flex:1 1 auto;max-width:40px;background:var(--gold);opacity:0.4;}
+
+    .hero-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(3rem,6vw,5.5rem);font-weight:300;line-height:1;
+    }
+    .hero-title .line2 { font-style:italic;color:var(--gold);display:block; }
+    .hero-sub { margin-top:16px;font-size:13px;color:var(--muted);max-width:480px;line-height:1.7;font-weight:400; }
+
+    .stats {
+      display:flex;gap:1px;background:var(--border);
+      border:1px solid var(--border);border-radius:10px;overflow:hidden;
+      animation:slideDown 0.8s 0.3s both;
+    }
+    .stat { flex:1;padding:18px 20px;background:var(--surface);display:flex;flex-direction:column;gap:4px;transition:background 0.2s; }
+    .stat:hover { background:rgba(201,169,110,0.04); }
+    .stat-num { font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--gold);line-height:1; }
+    .stat-label { font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted); }
+
+    .viewer-section { animation:slideUp 0.9s 0.35s both;flex:1; }
+    .viewer-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:16px; }
+    .viewer-title {
+      display:flex;align-items:center;gap:10px;
+      font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);
+    }
+    .viewer-title::before { content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold); }
+
+    .viewer-actions { display:flex;gap:8px; }
+    .v-btn {
+      display:flex;align-items:center;gap:6px;
+      padding:7px 14px;border:1px solid var(--border);border-radius:6px;
+      background:transparent;color:var(--muted);
+      font-family:'Syne',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.05em;
+      text-decoration:none;cursor:pointer;transition:all 0.2s;
+    }
+    .v-btn:hover{border-color:var(--border-bright);color:var(--text);}
+    .v-btn svg{width:12px;height:12px;}
+
+    .viewer-frame {
+      border-radius:12px;overflow:hidden;
+      border:1px solid var(--border);
+      box-shadow:0 0 0 1px rgba(201,169,110,0.06),0 24px 80px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .viewer-chrome {
+      background:#131720;padding:14px 20px;
+      display:flex;align-items:center;gap:16px;
+      border-bottom:1px solid var(--border);
+    }
+    .chrome-dots{display:flex;gap:6px;}
+    .chrome-dots i{width:11px;height:11px;border-radius:50%;display:block;}
+    .chrome-dots i:nth-child(1){background:#ff5f57;}
+    .chrome-dots i:nth-child(2){background:#febc2e;}
+    .chrome-dots i:nth-child(3){background:#28c840;}
+    .chrome-bar {
+      flex:1;background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);border-radius:5px;
+      padding:5px 12px;font-size:11px;color:var(--muted);
+      display:flex;align-items:center;gap:6px;
+    }
+    .chrome-bar svg{width:10px;height:10px;opacity:0.5;}
+
+    iframe { display:block;width:100%;height:88vh;border:none;background:#1a1a1a; }
+
+    .footer-strip {
+      display:flex;align-items:center;justify-content:space-between;
+      padding-top:20px;border-top:1px solid var(--border);
+      animation:fadeIn 1s 0.5s both;
+    }
+    .footer-copy{font-size:11px;color:var(--muted);}
+    .footer-copy strong{color:rgba(255,255,255,0.4);font-weight:500;}
+    .footer-tags{display:flex;gap:8px;}
+    .tag{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);border-radius:4px;color:var(--muted);}
+
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+    @media(max-width:768px){
+      body{cursor:auto;}
+      .cursor,.cursor-ring{display:none;}
+      .shell{grid-template-columns:1fr;}
+      aside{position:static;height:auto;padding:32px 24px;border-right:none;border-bottom:1px solid var(--border);}
+      main{padding:32px 20px;}
+      iframe{height:55vh;}
+      .stats{flex-wrap:wrap;}
+      .footer-strip{flex-direction:column;gap:16px;align-items:flex-start;}
+    }
+  </style>
 </head>
 <body>
-    <iframe 
-        src="AK_Resume.pdf#view=FitH&toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&page=1" 
-        frameborder="0"
-    ></iframe>
 
-    <script>
-        function toggleFullScreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            }
-        }
-        
-        document.addEventListener('click', toggleFullScreen);
-        window.addEventListener('load', toggleFullScreen);
-    </script>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="trail" id="t1"></div>
+  <div class="trail" id="t2"></div>
+  <div class="trail" id="t3"></div>
+  <div class="trail" id="t4"></div>
+  <div class="trail" id="t5"></div>
+
+  <div class="bg-canvas">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="grid-overlay"></div>
+
+  <!-- Hidden anchor used for all downloads -->
+  <a id="dl-anchor" href="AK_Resume.pdf" download="Akshaykumar_Gunari_Resume.pdf" style="display:none" aria-hidden="true"></a>
+
+  <div class="shell">
+
+    <aside>
+      <div class="logo-mark">AK</div>
+
+      <div class="aside-name">Akshaykumar<br><em>Gunari</em></div>
+      <div class="aside-role">Programmer | AI & ML Enthusiast | Linux Kernel Developer</div>
+
+      <div class="divider"></div>
+
+      <div class="nav-label">Connect</div>
+      <nav class="aside-links">
+        <a class="aside-link" href="mailto:akshaygunari@gmail.com">
+          <div class="icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          Email Me
+        </a>
+        <a class="aside-link" href="https://github.com/akshaykumar-gunari" target="_blank">
+          <div class="icon">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.01c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.004 2.04.14 3 .4 2.28-1.55 3.28-1.23 3.28-1.23.65 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </div>
+          GitHub
+        </a>
+        <a class="aside-link" href="https://www.linkedin.com/in/akshaykumar-gunari-59b132167/" target="_blank">
+          <div class="icon">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          LinkedIn
+        </a>
+        <a class="aside-link" href="https://akshaykumar-gunari.github.io/Portfolio/" target="_blank">
+          <div class="icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9"/></svg>
+          </div>
+          Portfolio
+        </a>
+      </nav>
+
+      <div class="aside-bottom">
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span class="status-text">Open to opportunities</span>
+        </div>
+        <button class="download-btn" onclick="triggerDownload()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+          Download Resume
+        </button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="breadcrumb">
+          <span>akshaykumar-gunari.github.io</span>
+          <span>/</span>
+          <span style="color:var(--text)">resume</span>
+        </div>
+        <div class="badge">
+          <span style="width:6px;height:6px;background:var(--gold);border-radius:50%;display:inline-block;box-shadow:0 0 6px var(--gold)"></span>
+          _AK_
+        </div>
+      </div>
+
+      <div class="hero">
+        <div class="hero-eyebrow">Curriculum Vitae</div>
+        <h1 class="hero-title">
+          Building things<br>
+          <span class="line2">that matter.</span>
+        </h1>
+        <p class="hero-sub">
+          Systems enthusiast exploring the depths of Linux kernel and AI.
+          Driven by curiosity, performance, and building from first principles.
+        </p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-num">~5</div><div class="stat-label">Years Exp.</div></div>
+        <div class="stat"><div class="stat-num">12</div><div class="stat-label">Projects</div></div>
+        <div class="stat"><div class="stat-num">2</div><div class="stat-label">Companies</div></div>
+        <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Coffee Cups</div></div>
+      </div>
+
+      <div class="viewer-section">
+        <div class="viewer-header">
+          <div class="viewer-title">Resume Document</div>
+          <div class="viewer-actions">
+            <a class="v-btn" href="AK_Resume.pdf" target="_blank">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open
+            </a>
+            <button class="v-btn" onclick="triggerDownload()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+              Save
+            </button>
+          </div>
+        </div>
+
+        <div class="viewer-frame">
+          <div class="viewer-chrome">
+            <div class="chrome-dots"><i></i><i></i><i></i></div>
+            <div class="chrome-bar">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              akshaykumar-gunari.github.io/AK-Resume/AK_Resume.pdf
+            </div>
+          </div>
+          <iframe src="AK_Resume.pdf#zoom=165" title="Resume"></iframe>
+        </div>
+      </div>
+
+      <div class="footer-strip">
+        <div class="footer-copy">Hosted on <strong>GitHub Pages</strong> · Built by AK</div>
+        <div class="footer-tags">
+          <div class="tag">Bangalore</div>
+          <div class="tag">India</div>
+          <div class="tag">2026</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Reliable download: clicks the hidden <a download> anchor.
+    // The `download` attribute tells the browser to save rather than navigate,
+    // and works on same-origin files without any fetch/CORS issues.
+    function triggerDownload() {
+      document.getElementById('dl-anchor').click();
+    }
+
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    const trails = ['t1','t2','t3','t4','t5'].map(id=>document.getElementById(id));
+    let mx=0,my=0,rx=0,ry=0;
+    const history = Array(20).fill({x:0,y:0});
+
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+
+    function loop(){
+      cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+      rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+      ring.style.left=rx+'px'; ring.style.top=ry+'px';
+      history.unshift({x:mx,y:my}); history.pop();
+      trails.forEach((t,i)=>{
+        const h=history[Math.min((i+1)*3,history.length-1)];
+        t.style.left=h.x+'px'; t.style.top=h.y+'px';
+        t.style.opacity=(0.45-i*0.08).toString();
+        const s=6-i*0.8; t.style.width=s+'px'; t.style.height=s+'px';
+        t.style.background=i<2?'var(--gold)':'var(--teal)';
+        t.style.boxShadow=`0 0 ${6-i}px 2px ${i<2?'rgba(201,169,110,0.4)':'rgba(78,201,176,0.3)'}`;
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    document.querySelectorAll('a,button').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{
+        cursor.style.width='10px';cursor.style.height='10px';cursor.style.background='var(--teal)';
+        cursor.style.boxShadow='0 0 8px 3px rgba(78,201,176,0.5),0 0 18px 6px rgba(78,201,176,0.15)';
+        ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(78,201,176,0.7)';
+      });
+      el.addEventListener('mouseleave',()=>{
+        cursor.style.width='8px';cursor.style.height='8px';cursor.style.background='var(--gold)';
+        cursor.style.boxShadow='0 0 6px 2px rgba(201,169,110,0.5),0 0 14px 4px rgba(201,169,110,0.2)';
+        ring.style.width='28px';ring.style.height='28px';ring.style.borderColor='rgba(201,169,110,0.6)';
+      });
+    });
+  </script>
 </body>
 </html>
